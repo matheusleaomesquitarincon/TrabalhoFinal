@@ -49,7 +49,6 @@
 
 | Documento | Descrição | Link |
 |-----------|-----------|------|
-| **RESUMO.md** | Resumo completo do projeto e status | [Ver](./RESUMO.md) |
 | **docs/README.md** | Documentação principal do projeto | [Ver](./docs/README.md) |
 | **docs/INSTALACAO.md** | Guia passo a passo de instalação | [Ver](./docs/INSTALACAO.md) |
 | **docs/API.md** | Documentação completa da API REST | [Ver](./docs/API.md) |
