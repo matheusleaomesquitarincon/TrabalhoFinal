@@ -4,7 +4,8 @@
  * Exibe o cabeçalho da aplicação com navegação e informações.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { obterQuantidadeItens } from '../services/cartService';
 import './Header.css';
 
 /**
@@ -12,7 +13,35 @@ import './Header.css';
  * 
  * @returns {JSX.Element} Header renderizado
  */
-export const Header = ({ usuarioLogado, onLogout }) => {
+export const Header = ({ onNavigate }) => {
+    const [quantidadeCarrinho, setQuantidadeCarrinho] = useState(0);
+
+    useEffect(() => {
+        // Atualizar quantidade do carrinho
+        const quantidade = obterQuantidadeItens();
+        setQuantidadeCarrinho(quantidade);
+
+        // Listener para mudanças no localStorage
+        const handleStorageChange = () => {
+            setQuantidadeCarrinho(obterQuantidadeItens());
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        // Custom event para atualizações locais
+        window.addEventListener('carrinhoAtualizado', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            window.removeEventListener('carrinhoAtualizado', handleStorageChange);
+        };
+    }, []);
+
+    const handleNavigate = (page) => {
+        if (onNavigate) {
+            onNavigate(page);
+        }
+    };
+
     return (
         <header className="header">
             <div className="container">
@@ -24,29 +53,20 @@ export const Header = ({ usuarioLogado, onLogout }) => {
                     
                     <nav className="nav">
                         <ul>
-                            <li><a href="/">Início</a></li>
-                            <li><a href="/produtos">Produtos</a></li>
-                            <li><a href="/categorias">Categorias</a></li>
-                            {usuarioLogado && (
-                                <>
-                                    <li><a href="/meus-pedidos">Meus Pedidos</a></li>
-                                    <li><a href="/perfil">Perfil</a></li>
-                                    <li>
-                                        <button 
-                                            className="btn-logout"
-                                            onClick={onLogout}
-                                        >
-                                            Sair
-                                        </button>
-                                    </li>
-                                </>
-                            )}
-                            {!usuarioLogado && (
-                                <>
-                                    <li><a href="/login" className="btn btn-primary">Login</a></li>
-                                    <li><a href="/registro" className="btn btn-secondary">Registrar</a></li>
-                                </>
-                            )}
+                            <li><a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('home'); }}>Início</a></li>
+                            <li><a href="#" onClick={(e) => { e.preventDefault(); handleNavigate('produtos'); }}>Produtos</a></li>
+                            <li className="carrinho-nav">
+                                <a 
+                                    href="#" 
+                                    onClick={(e) => { e.preventDefault(); handleNavigate('carrinho'); }}
+                                    className="carrinho-link"
+                                >
+                                    🛒 Carrinho
+                                    {quantidadeCarrinho > 0 && (
+                                        <span className="badge">{quantidadeCarrinho}</span>
+                                    )}
+                                </a>
+                            </li>
                         </ul>
                     </nav>
                 </div>

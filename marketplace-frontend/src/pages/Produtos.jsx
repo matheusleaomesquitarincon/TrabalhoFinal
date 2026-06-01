@@ -10,6 +10,7 @@ import {
     buscarProdutosPorNome,
     buscarProdutosPorCategoria
 } from '../services/api';
+import { adicionarAoCarrinho } from '../services/cartService';
 import ProductCard from '../components/ProductCard';
 import './Produtos.css';
 
@@ -103,7 +104,10 @@ export const Produtos = () => {
      * Manipula adição de produto ao carrinho.
      */
     const handleAddToCart = (product) => {
-        alert(`${product.nome} adicionado ao carrinho!`);
+        adicionarAoCarrinho(product, 1);
+        // Disparar evento customizado para atualizar o badge do carrinho
+        window.dispatchEvent(new Event('carrinhoAtualizado'));
+        alert(`✓ ${product.nome} adicionado ao carrinho!`);
     };
     
     return (

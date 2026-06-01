@@ -2,7 +2,6 @@ package com.marketplace.api.service;
 
 import com.marketplace.api.model.Product;
 import com.marketplace.api.repository.ProductRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import java.util.Optional;
  * @version 1.0
  */
 @Service
-@Slf4j
 @Transactional
 public class ProductService {
     
@@ -32,7 +30,6 @@ public class ProductService {
      * @return lista de todos os produtos
      */
     public List<Product> obterTodos() {
-        log.info("Obtendo todos os produtos");
         return productRepository.findAll();
     }
     
@@ -43,7 +40,6 @@ public class ProductService {
      * @return Optional contendo o produto se encontrado
      */
     public Optional<Product> obterPorId(Long id) {
-        log.info("Obtendo produto com ID: {}", id);
         return productRepository.findById(id);
     }
     
@@ -54,7 +50,6 @@ public class ProductService {
      * @return lista de produtos encontrados
      */
     public List<Product> buscarPorNome(String nome) {
-        log.info("Buscando produtos com nome: {}", nome);
         return productRepository.findByNomeIgnoreCaseContaining(nome);
     }
     
@@ -65,7 +60,6 @@ public class ProductService {
      * @return lista de produtos da categoria
      */
     public List<Product> buscarPorCategoria(String categoria) {
-        log.info("Buscando produtos da categoria: {}", categoria);
         return productRepository.findByCategoria(categoria);
     }
     
@@ -75,7 +69,6 @@ public class ProductService {
      * @return lista de produtos em estoque
      */
     public List<Product> obterProdutosEmEstoque() {
-        log.info("Obtendo produtos em estoque");
         return productRepository.findByQuantidadeGreaterThan(0);
     }
     
@@ -86,7 +79,6 @@ public class ProductService {
      * @return produto criado
      */
     public Product criar(Product product) {
-        log.info("Criando novo produto: {}", product.getNome());
         return productRepository.save(product);
     }
     
@@ -98,7 +90,6 @@ public class ProductService {
      * @return produto atualizado
      */
     public Product atualizar(Long id, Product product) {
-        log.info("Atualizando produto com ID: {}", id);
         Optional<Product> existente = productRepository.findById(id);
         
         if (existente.isPresent()) {
@@ -112,7 +103,6 @@ public class ProductService {
             return productRepository.save(p);
         }
         
-        log.warn("Produto com ID {} não encontrado", id);
         throw new RuntimeException("Produto não encontrado");
     }
     
@@ -122,11 +112,9 @@ public class ProductService {
      * @param id identificador do produto
      */
     public void deletar(Long id) {
-        log.info("Deletando produto com ID: {}", id);
         if (productRepository.existsById(id)) {
             productRepository.deleteById(id);
         } else {
-            log.warn("Produto com ID {} não encontrado", id);
             throw new RuntimeException("Produto não encontrado");
         }
     }
@@ -140,7 +128,6 @@ public class ProductService {
      * @return true se sucesso, false se quantidade insuficiente
      */
     public boolean reduzirEstoque(Long id, Integer quantidade) {
-        log.info("Reduzindo estoque do produto {}: {} unidades", id, quantidade);
         Optional<Product> product = productRepository.findById(id);
         
         if (product.isPresent()) {
@@ -150,7 +137,6 @@ public class ProductService {
                 productRepository.save(p);
                 return true;
             }
-            log.warn("Quantidade insuficiente para produto ID: {}", id);
         }
         return false;
     }
@@ -163,7 +149,7 @@ public class ProductService {
      * @param quantidade quantidade a aumentar
      */
     public void aumentarEstoque(Long id, Integer quantidade) {
-        log.info("Aumentando estoque do produto {}: {} unidades", id, quantidade);
+
         Optional<Product> product = productRepository.findById(id);
         
         if (product.isPresent()) {
@@ -171,7 +157,6 @@ public class ProductService {
             p.setQuantidade(p.getQuantidade() + quantidade);
             productRepository.save(p);
         } else {
-            log.warn("Produto com ID {} não encontrado", id);
             throw new RuntimeException("Produto não encontrado");
         }
     }

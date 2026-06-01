@@ -2,9 +2,6 @@ package com.marketplace.api.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -19,9 +16,6 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "pedidos")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Order {
     
     /**
@@ -99,5 +93,89 @@ public class Order {
     @PreUpdate
     protected void onUpdate() {
         dataAtualizacao = LocalDateTime.now();
+    }
+
+    // Construtores
+    public Order() {
+    }
+
+    public Order(User usuario, BigDecimal total, String enderecoEntrega) {
+        this.usuario = usuario;
+        this.total = total;
+        this.enderecoEntrega = enderecoEntrega;
+        this.status = "PENDENTE";
+    }
+
+    // Getters e Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(User usuario) {
+        this.usuario = usuario;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getDataPedido() {
+        return dataPedido;
+    }
+
+    public void setDataPedido(LocalDateTime dataPedido) {
+        this.dataPedido = dataPedido;
+    }
+
+    public String getDataEntregaEstimada() {
+        return dataEntregaEstimada;
+    }
+
+    public void setDataEntregaEstimada(String dataEntregaEstimada) {
+        this.dataEntregaEstimada = dataEntregaEstimada;
+    }
+
+    public String getObservacoes() {
+        return observacoes;
+    }
+
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
+    }
+
+    public String getEnderecoEntrega() {
+        return enderecoEntrega;
+    }
+
+    public void setEnderecoEntrega(String enderecoEntrega) {
+        this.enderecoEntrega = enderecoEntrega;
+    }
+
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
     }
 }
