@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import Header from './components/Header';
 import Home from './pages/Home';
 import Produtos from './pages/Produtos';
+import Carrinho from './pages/Carrinho';
 import './App.css';
 
 /**
@@ -45,6 +46,8 @@ function App() {
                 return <Home />;
             case 'produtos':
                 return <Produtos />;
+            case 'carrinho':
+                return <Carrinho />;
             default:
                 return <Home />;
         }
@@ -53,8 +56,6 @@ function App() {
     return (
         <div className="app">
             <Header 
-                usuarioLogado={usuarioLogado}
-                onLogout={handleLogout}
                 onNavigate={navigate}
             />
             

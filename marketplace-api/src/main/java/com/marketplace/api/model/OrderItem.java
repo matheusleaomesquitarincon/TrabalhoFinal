@@ -2,9 +2,6 @@ package com.marketplace.api.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 /**
@@ -18,9 +15,6 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "itens_pedido")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class OrderItem {
     
     /**
@@ -73,5 +67,68 @@ public class OrderItem {
         if (quantidade != null && precoUnitario != null) {
             subtotal = precoUnitario.multiply(BigDecimal.valueOf(quantidade));
         }
+    }
+
+    // Construtores
+    public OrderItem() {
+    }
+
+    public OrderItem(Order pedido, Product produto, Integer quantidade, BigDecimal precoUnitario) {
+        this.pedido = pedido;
+        this.produto = produto;
+        this.quantidade = quantidade;
+        this.precoUnitario = precoUnitario;
+        calcularSubtotal();
+    }
+
+    // Getters e Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Order getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Order pedido) {
+        this.pedido = pedido;
+    }
+
+    public Product getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Product produto) {
+        this.produto = produto;
+    }
+
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+        calcularSubtotal();
+    }
+
+    public BigDecimal getPrecoUnitario() {
+        return precoUnitario;
+    }
+
+    public void setPrecoUnitario(BigDecimal precoUnitario) {
+        this.precoUnitario = precoUnitario;
+        calcularSubtotal();
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
     }
 }

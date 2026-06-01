@@ -3,7 +3,6 @@ package com.marketplace.api.controller;
 import com.marketplace.api.model.Order;
 import com.marketplace.api.model.OrderItem;
 import com.marketplace.api.service.OrderService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +22,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/pedidos")
-@CrossOrigin(origins = "http://localhost:3000")
-@Slf4j
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class OrderController {
     
     @Autowired
@@ -37,7 +35,6 @@ public class OrderController {
      */
     @GetMapping
     public ResponseEntity<List<Order>> obterTodos() {
-        log.info("GET /api/pedidos - Obtendo todos os pedidos");
         List<Order> pedidos = orderService.obterTodos();
         return ResponseEntity.ok(pedidos);
     }
@@ -50,7 +47,6 @@ public class OrderController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> obterPorId(@PathVariable Long id) {
-        log.info("GET /api/pedidos/{} - Obtendo pedido", id);
         Optional<Order> order = orderService.obterPorId(id);
         
         if (order.isPresent()) {
@@ -68,7 +64,6 @@ public class OrderController {
      */
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<Order>> obterPedidosPorUsuario(@PathVariable Long usuarioId) {
-        log.info("GET /api/pedidos/usuario/{} - Obtendo pedidos", usuarioId);
         List<Order> pedidos = orderService.obterPedidosPorUsuario(usuarioId);
         return ResponseEntity.ok(pedidos);
     }
@@ -81,7 +76,6 @@ public class OrderController {
      */
     @GetMapping("/status/{status}")
     public ResponseEntity<List<Order>> obterPedidosPorStatus(@PathVariable String status) {
-        log.info("GET /api/pedidos/status/{} - Obtendo pedidos", status);
         List<Order> pedidos = orderService.obterPedidosPorStatus(status);
         return ResponseEntity.ok(pedidos);
     }
@@ -94,7 +88,6 @@ public class OrderController {
      */
     @PostMapping
     public ResponseEntity<Order> criar(@Valid @RequestBody Order order) {
-        log.info("POST /api/pedidos - Criando novo pedido");
         Order created = orderService.criar(order);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
@@ -108,7 +101,6 @@ public class OrderController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @Valid @RequestBody Order order) {
-        log.info("PUT /api/pedidos/{} - Atualizando", id);
         try {
             Order updated = orderService.atualizar(id, order);
             return ResponseEntity.ok(updated);
@@ -126,7 +118,6 @@ public class OrderController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletar(@PathVariable Long id) {
-        log.info("DELETE /api/pedidos/{} - Deletando", id);
         try {
             orderService.deletar(id);
             return ResponseEntity.noContent().build();
@@ -147,7 +138,6 @@ public class OrderController {
     public ResponseEntity<?> alterarStatus(
             @PathVariable Long id,
             @RequestParam String status) {
-        log.info("PATCH /api/pedidos/{}/status - Alterando para: {}", id, status);
         try {
             Order updated = orderService.alterarStatus(id, status);
             return ResponseEntity.ok(updated);
@@ -168,7 +158,6 @@ public class OrderController {
     public ResponseEntity<?> adicionarItem(
             @PathVariable Long pedidoId,
             @Valid @RequestBody OrderItem item) {
-        log.info("POST /api/pedidos/{}/itens - Adicionando item", pedidoId);
         try {
             OrderItem added = orderService.adicionarItem(pedidoId, item);
             return ResponseEntity.status(HttpStatus.CREATED).body(added);
@@ -186,7 +175,6 @@ public class OrderController {
      */
     @DeleteMapping("/itens/{itemId}")
     public ResponseEntity<?> removerItem(@PathVariable Long itemId) {
-        log.info("DELETE /api/pedidos/itens/{} - Removendo item", itemId);
         try {
             orderService.removerItem(itemId);
             return ResponseEntity.noContent().build();
@@ -204,7 +192,6 @@ public class OrderController {
      */
     @GetMapping("/{pedidoId}/itens")
     public ResponseEntity<List<OrderItem>> obterItensPedido(@PathVariable Long pedidoId) {
-        log.info("GET /api/pedidos/{}/itens - Obtendo itens", pedidoId);
         List<OrderItem> itens = orderService.obterItensPedido(pedidoId);
         return ResponseEntity.ok(itens);
     }

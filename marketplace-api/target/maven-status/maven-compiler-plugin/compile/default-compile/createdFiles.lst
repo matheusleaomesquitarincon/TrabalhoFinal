@@ -12,4 +12,5 @@ com\marketplace\api\service\OrderService.class
 com\marketplace\api\controller\ProductController.class
 com\marketplace\api\repository\UserRepository.class
 com\marketplace\api\service\UserService.class
+com\marketplace\api\config\DataLoader.class
 com\marketplace\api\MarketplaceApplication.class

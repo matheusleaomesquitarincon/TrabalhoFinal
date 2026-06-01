@@ -5,7 +5,6 @@ import com.marketplace.api.model.OrderItem;
 import com.marketplace.api.model.User;
 import com.marketplace.api.repository.OrderRepository;
 import com.marketplace.api.repository.OrderItemRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,6 @@ import java.util.Optional;
  * @version 1.0
  */
 @Service
-@Slf4j
 @Transactional
 public class OrderService {
     
@@ -39,7 +37,6 @@ public class OrderService {
      * @return lista de todos os pedidos
      */
     public List<Order> obterTodos() {
-        log.info("Obtendo todos os pedidos");
         return orderRepository.findAll();
     }
     
@@ -50,7 +47,6 @@ public class OrderService {
      * @return Optional contendo o pedido se encontrado
      */
     public Optional<Order> obterPorId(Long id) {
-        log.info("Obtendo pedido com ID: {}", id);
         return orderRepository.findById(id);
     }
     
@@ -61,7 +57,6 @@ public class OrderService {
      * @return lista de pedidos do usuário
      */
     public List<Order> obterPedidosPorUsuario(Long usuarioId) {
-        log.info("Obtendo pedidos do usuário: {}", usuarioId);
         return orderRepository.findByUsuarioId(usuarioId);
     }
     
@@ -72,7 +67,6 @@ public class OrderService {
      * @return lista de pedidos com o status especificado
      */
     public List<Order> obterPedidosPorStatus(String status) {
-        log.info("Obtendo pedidos com status: {}", status);
         return orderRepository.findByStatus(status);
     }
     
@@ -83,7 +77,7 @@ public class OrderService {
      * @return pedido criado
      */
     public Order criar(Order order) {
-        log.info("Criando novo pedido para usuário: {}", order.getUsuario().getId());
+
         return orderRepository.save(order);
     }
     
@@ -95,7 +89,6 @@ public class OrderService {
      * @return pedido atualizado
      */
     public Order atualizar(Long id, Order order) {
-        log.info("Atualizando pedido com ID: {}", id);
         Optional<Order> existente = orderRepository.findById(id);
         
         if (existente.isPresent()) {
@@ -106,7 +99,6 @@ public class OrderService {
             return orderRepository.save(o);
         }
         
-        log.warn("Pedido com ID {} não encontrado", id);
         throw new RuntimeException("Pedido não encontrado");
     }
     
@@ -116,11 +108,9 @@ public class OrderService {
      * @param id identificador do pedido
      */
     public void deletar(Long id) {
-        log.info("Deletando pedido com ID: {}", id);
         if (orderRepository.existsById(id)) {
             orderRepository.deleteById(id);
         } else {
-            log.warn("Pedido com ID {} não encontrado", id);
             throw new RuntimeException("Pedido não encontrado");
         }
     }
@@ -135,7 +125,6 @@ public class OrderService {
      * @return pedido atualizado
      */
     public Order alterarStatus(Long id, String novoStatus) {
-        log.info("Alterando status do pedido {} para: {}", id, novoStatus);
         Optional<Order> order = orderRepository.findById(id);
         
         if (order.isPresent()) {
@@ -144,7 +133,6 @@ public class OrderService {
             return orderRepository.save(o);
         }
         
-        log.warn("Pedido com ID {} não encontrado", id);
         throw new RuntimeException("Pedido não encontrado");
     }
     
@@ -156,7 +144,6 @@ public class OrderService {
      * @return item adicionado
      */
     public OrderItem adicionarItem(Long pedidoId, OrderItem item) {
-        log.info("Adicionando item ao pedido: {}", pedidoId);
         Optional<Order> order = orderRepository.findById(pedidoId);
         
         if (order.isPresent()) {
@@ -169,7 +156,6 @@ public class OrderService {
             return savedItem;
         }
         
-        log.warn("Pedido com ID {} não encontrado", pedidoId);
         throw new RuntimeException("Pedido não encontrado");
     }
     
@@ -179,7 +165,6 @@ public class OrderService {
      * @param itemId identificador do item
      */
     public void removerItem(Long itemId) {
-        log.info("Removendo item: {}", itemId);
         Optional<OrderItem> item = orderItemRepository.findById(itemId);
         
         if (item.isPresent()) {
@@ -189,7 +174,6 @@ public class OrderService {
             // Atualizar total do pedido
             atualizarTotalPedido(pedidoId);
         } else {
-            log.warn("Item com ID {} não encontrado", itemId);
             throw new RuntimeException("Item não encontrado");
         }
     }
@@ -201,7 +185,6 @@ public class OrderService {
      * @return lista de itens do pedido
      */
     public List<OrderItem> obterItensPedido(Long pedidoId) {
-        log.info("Obtendo itens do pedido: {}", pedidoId);
         return orderItemRepository.findByPedidoId(pedidoId);
     }
     
@@ -211,7 +194,6 @@ public class OrderService {
      * @param pedidoId identificador do pedido
      */
     private void atualizarTotalPedido(Long pedidoId) {
-        log.debug("Atualizando total do pedido: {}", pedidoId);
         Optional<Order> order = orderRepository.findById(pedidoId);
         
         if (order.isPresent()) {
@@ -223,7 +205,6 @@ public class OrderService {
             Order o = order.get();
             o.setTotal(total);
             orderRepository.save(o);
-            log.debug("Total do pedido {} atualizado para: {}", pedidoId, total);
         }
     }
     
@@ -234,7 +215,6 @@ public class OrderService {
      * @return quantidade de pedidos
      */
     public long contarPorStatus(String status) {
-        log.info("Contando pedidos com status: {}", status);
         return orderRepository.countByStatus(status);
     }
 }

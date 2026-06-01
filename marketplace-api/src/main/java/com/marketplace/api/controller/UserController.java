@@ -2,7 +2,6 @@ package com.marketplace.api.controller;
 
 import com.marketplace.api.model.User;
 import com.marketplace.api.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +21,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "http://localhost:3000")
-@Slf4j
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class UserController {
     
     @Autowired
@@ -36,7 +34,6 @@ public class UserController {
      */
     @GetMapping
     public ResponseEntity<List<User>> obterTodos() {
-        log.info("GET /api/usuarios - Obtendo todos os usuários");
         List<User> usuarios = userService.obterTodos();
         return ResponseEntity.ok(usuarios);
     }
@@ -49,7 +46,6 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> obterPorId(@PathVariable Long id) {
-        log.info("GET /api/usuarios/{} - Obtendo usuário", id);
         Optional<User> user = userService.obterPorId(id);
         
         if (user.isPresent()) {
@@ -67,7 +63,6 @@ public class UserController {
      */
     @GetMapping("/email/{email}")
     public ResponseEntity<?> buscarPorEmail(@PathVariable String email) {
-        log.info("GET /api/usuarios/email/{} - Buscando usuário", email);
         Optional<User> user = userService.buscarPorEmail(email);
         
         if (user.isPresent()) {
@@ -85,7 +80,6 @@ public class UserController {
      */
     @GetMapping("/buscar/nome")
     public ResponseEntity<List<User>> buscarPorNome(@RequestParam String nome) {
-        log.info("GET /api/usuarios/buscar/nome - Buscando: {}", nome);
         List<User> usuarios = userService.buscarPorNome(nome);
         return ResponseEntity.ok(usuarios);
     }
@@ -97,7 +91,6 @@ public class UserController {
      */
     @GetMapping("/tipo/clientes")
     public ResponseEntity<List<User>> obterClientes() {
-        log.info("GET /api/usuarios/tipo/clientes");
         List<User> clientes = userService.obterClientes();
         return ResponseEntity.ok(clientes);
     }
@@ -109,7 +102,6 @@ public class UserController {
      */
     @GetMapping("/tipo/admin")
     public ResponseEntity<List<User>> obterAdministradores() {
-        log.info("GET /api/usuarios/tipo/admin");
         List<User> admins = userService.obterAdministradores();
         return ResponseEntity.ok(admins);
     }
@@ -122,7 +114,6 @@ public class UserController {
      */
     @PostMapping
     public ResponseEntity<?> criar(@Valid @RequestBody User user) {
-        log.info("POST /api/usuarios - Criando novo usuário: {}", user.getEmail());
         try {
             User created = userService.criar(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -141,7 +132,6 @@ public class UserController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @Valid @RequestBody User user) {
-        log.info("PUT /api/usuarios/{} - Atualizando", id);
         try {
             User updated = userService.atualizar(id, user);
             return ResponseEntity.ok(updated);
@@ -159,7 +149,6 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletar(@PathVariable Long id) {
-        log.info("DELETE /api/usuarios/{} - Deletando", id);
         try {
             userService.deletar(id);
             return ResponseEntity.noContent().build();
@@ -177,7 +166,6 @@ public class UserController {
      */
     @PatchMapping("/{id}/ativar")
     public ResponseEntity<?> ativar(@PathVariable Long id) {
-        log.info("PATCH /api/usuarios/{}/ativar - Ativando", id);
         try {
             userService.ativar(id);
             return ResponseEntity.ok("Usuário ativado com sucesso");
@@ -195,7 +183,6 @@ public class UserController {
      */
     @PatchMapping("/{id}/desativar")
     public ResponseEntity<?> desativar(@PathVariable Long id) {
-        log.info("PATCH /api/usuarios/{}/desativar - Desativando", id);
         try {
             userService.desativar(id);
             return ResponseEntity.ok("Usuário desativado com sucesso");

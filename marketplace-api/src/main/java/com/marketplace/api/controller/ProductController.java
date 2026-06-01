@@ -2,7 +2,6 @@ package com.marketplace.api.controller;
 
 import com.marketplace.api.model.Product;
 import com.marketplace.api.service.ProductService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +21,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/produtos")
-@CrossOrigin(origins = "http://localhost:3000")
-@Slf4j
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class ProductController {
     
     @Autowired
@@ -36,7 +34,6 @@ public class ProductController {
      */
     @GetMapping
     public ResponseEntity<List<Product>> obterTodos() {
-        log.info("GET /api/produtos - Obtendo todos os produtos");
         List<Product> produtos = productService.obterTodos();
         return ResponseEntity.ok(produtos);
     }
@@ -49,7 +46,6 @@ public class ProductController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> obterPorId(@PathVariable Long id) {
-        log.info("GET /api/produtos/{} - Obtendo produto", id);
         Optional<Product> product = productService.obterPorId(id);
         
         if (product.isPresent()) {
@@ -67,7 +63,6 @@ public class ProductController {
      */
     @GetMapping("/buscar/nome")
     public ResponseEntity<List<Product>> buscarPorNome(@RequestParam String nome) {
-        log.info("GET /api/produtos/buscar/nome - Buscando: {}", nome);
         List<Product> produtos = productService.buscarPorNome(nome);
         return ResponseEntity.ok(produtos);
     }
@@ -80,7 +75,6 @@ public class ProductController {
      */
     @GetMapping("/buscar/categoria")
     public ResponseEntity<List<Product>> buscarPorCategoria(@RequestParam String categoria) {
-        log.info("GET /api/produtos/buscar/categoria - Categoria: {}", categoria);
         List<Product> produtos = productService.buscarPorCategoria(categoria);
         return ResponseEntity.ok(produtos);
     }
@@ -92,7 +86,6 @@ public class ProductController {
      */
     @GetMapping("/estoque/disponiveis")
     public ResponseEntity<List<Product>> obterProdutosEmEstoque() {
-        log.info("GET /api/produtos/estoque/disponiveis");
         List<Product> produtos = productService.obterProdutosEmEstoque();
         return ResponseEntity.ok(produtos);
     }
@@ -105,7 +98,6 @@ public class ProductController {
      */
     @PostMapping
     public ResponseEntity<Product> criar(@Valid @RequestBody Product product) {
-        log.info("POST /api/produtos - Criando novo produto: {}", product.getNome());
         Product created = productService.criar(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
@@ -119,7 +111,6 @@ public class ProductController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @Valid @RequestBody Product product) {
-        log.info("PUT /api/produtos/{} - Atualizando", id);
         try {
             Product updated = productService.atualizar(id, product);
             return ResponseEntity.ok(updated);
@@ -137,7 +128,6 @@ public class ProductController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletar(@PathVariable Long id) {
-        log.info("DELETE /api/produtos/{} - Deletando", id);
         try {
             productService.deletar(id);
             return ResponseEntity.noContent().build();
@@ -158,7 +148,6 @@ public class ProductController {
     public ResponseEntity<?> reduzirEstoque(
             @PathVariable Long id,
             @RequestParam Integer quantidade) {
-        log.info("PATCH /api/produtos/{}/estoque - Reduzindo {}", id, quantidade);
         
         if (productService.reduzirEstoque(id, quantidade)) {
             return ResponseEntity.ok("Estoque reduzido com sucesso");
